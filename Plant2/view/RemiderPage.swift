@@ -3,7 +3,7 @@ import SwiftUI
 struct ReminderPage: View {
     
     @ObservedObject var viewModel: PlantViewModel
-    var plant: Plant? = nil      // if a plant is passed = edit, if nil = add new
+    var plant: Plant? = nil      
     @Environment(\.dismiss) var dismiss
     
     @State private var name = ""

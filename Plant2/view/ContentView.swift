@@ -4,15 +4,14 @@ struct ContentView: View {
     
     @StateObject var viewModel = PlantViewModel()
     
-    @State private var showSheet = false          // يفتح الشيت
-    @State private var showNoReminders = false    // يظهر صفحة "No reminders"
+    @State private var showSheet = false
+    @State private var showNoReminders = false
     
     var body: some View {
         ZStack {
             
             Color.black.ignoresSafeArea()
             
-            // الصفحة الأولى
             VStack(spacing: 25) {
                 
                 Text("My Plants 🌿")
@@ -29,7 +28,7 @@ struct ContentView: View {
                 Image("Image")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 140, height: 140)
+                    .frame(width: 164, height: 200)
                 
                 Text("Start your plant journey!")
                     .font(.title2)
@@ -57,22 +56,18 @@ struct ContentView: View {
             }
             .padding(.vertical)
             
-            // صفحة "No reminders" (لما ينقفل الشيت بدون نباتات)
             if showNoReminders {
                 NoRemindersPage()
             }
             
-            // صفحة القائمة (لما يصير فيه نباتات)
             if !viewModel.plants.isEmpty {
                 TodayRem(viewModel: viewModel)
             }
             
-            // صفحة "All Done" (لما كل النباتات تنسقى)
             if viewModel.allDone {
                 DonePage(viewModel: viewModel)
             }
         }
-        // الشيت
         .sheet(isPresented: $showSheet, onDismiss: {
             if viewModel.plants.isEmpty {
                 showNoReminders = true
@@ -82,7 +77,7 @@ struct ContentView: View {
         }
         .preferredColorScheme(.dark)
         .onAppear {
-            viewModel.requestPermission()   // أضفته
+            viewModel.requestPermission()
         }
     }
 }

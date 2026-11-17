@@ -24,7 +24,7 @@ struct DonePage: View {
                 Image("Image")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 200, height: 200)
+                    .frame(width: 164, height: 200)
                 
                 Text("All Done! 🎉")
                     .font(.title2)

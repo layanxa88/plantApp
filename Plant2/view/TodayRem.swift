@@ -3,8 +3,8 @@ import SwiftUI
 struct TodayRem: View {
     
     @ObservedObject var viewModel: PlantViewModel
-    @State private var showSheet = false          // for the + button
-    @State private var selectedPlant: Plant?      // the plant that was tapped
+    @State private var showSheet = false
+    @State private var selectedPlant: Plant?   
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {

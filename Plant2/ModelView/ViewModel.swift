@@ -49,14 +49,11 @@ class PlantViewModel: ObservableObject {
         return Double(done) / Double(plants.count)
     }
     
-    // Are all plants watered?
     var allDone: Bool {
         progress == 1
     }
     
-    // MARK: - Notifications
     
-    // Ask the user for permission
     func requestPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
             print("Notifications allowed:", granted)
@@ -68,7 +65,7 @@ class PlantViewModel: ObservableObject {
         
         let content = UNMutableNotificationContent()
         content.title = "Planto"
-        content.body = "Hey! let's water your plant"
+        content.body = "Hey! let's water your \(plant.name) 🌱"
         content.sound = .default
         
         // Repeat interval in seconds
