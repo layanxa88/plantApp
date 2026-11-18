@@ -36,7 +36,6 @@ class PlantViewModel: ObservableObject {
         plants.removeAll { item in item.id == plant.id }
     }
     
-    // Progress of watered plants (0 to 1) for the progress bar
     var progress: Double {
         if plants.isEmpty { return 0 }
         
@@ -53,14 +52,12 @@ class PlantViewModel: ObservableObject {
         progress == 1
     }
     
-    
     func requestPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
             print("Notifications allowed:", granted)
         }
     }
     
-    // Schedule a reminder for the plant
     func scheduleNotification(_ plant: Plant) {
         
         let content = UNMutableNotificationContent()
@@ -92,7 +89,6 @@ class PlantViewModel: ObservableObject {
         UNUserNotificationCenter.current().add(request)
     }
     
-    // Cancel the plant's reminder
     func cancelNotification(_ plant: Plant) {
         UNUserNotificationCenter.current()
             .removePendingNotificationRequests(withIdentifiers: [plant.id.uuidString])

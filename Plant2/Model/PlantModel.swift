@@ -1,5 +1,4 @@
 import Foundation
-import Combine
 
 struct Plant: Identifiable, Codable {
     var id = UUID()
@@ -24,7 +23,6 @@ enum LightCondition: String, Codable, CaseIterable {
     case partialSun = "Partial Sun"
     case low = "Low Light"
     
-    // Icon shown next to each light option
     var icon: String {
         switch self {
         case .fullSun: return "sun.max"
