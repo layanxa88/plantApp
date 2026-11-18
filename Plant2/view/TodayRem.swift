@@ -4,7 +4,7 @@ struct TodayRem: View {
     
     @ObservedObject var viewModel: PlantViewModel
     @State private var showSheet = false
-    @State private var selectedPlant: Plant?   
+    @State private var selectedPlant: Plant?
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -22,7 +22,9 @@ struct TodayRem: View {
                 Divider()
                     .background(Color.gray)
                 
-                Text("Your plants are waiting for a sip 💦")
+                Text(viewModel.wateredCount == 0
+                     ? "Your plants are waiting for a sip 💦"
+                     : "\(viewModel.wateredCount) of \(viewModel.plants.count) plants watered")
                     .foregroundColor(.white)
                 
                 // Progress bar (scaleEffect makes it thicker)
@@ -32,12 +34,12 @@ struct TodayRem: View {
                     .padding(.horizontal)
                 
                 // Plants list
-                List(viewModel.plants) { plant in
+                List(viewModel.sortedPlants) { plant in
                     HStack(spacing: 15) {
                         
                         // The circle
                         Button {
-                            viewModel.toggleWatered(plant)
+                            withAnimation { viewModel.toggleWatered(plant) }
                         } label: {
                             Image(systemName: plant.isWatered ? "checkmark.circle.fill" : "circle")
                                 .font(.title)

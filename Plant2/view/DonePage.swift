@@ -21,7 +21,7 @@ struct DonePage: View {
                 
                 Spacer()
                 
-                Image("Image")
+                Image("Image 1")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 164, height: 200)

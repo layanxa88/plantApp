@@ -1,20 +1,26 @@
 import SwiftUI
 
 struct ReminderPage: View {
-    
+
     @ObservedObject var viewModel: PlantViewModel
-    var plant: Plant? = nil      
+    var plant: Plant? = nil
     @Environment(\.dismiss) var dismiss
-    
+
     @State private var name = ""
     @State private var room: PlantRoom = .bedroom
     @State private var light: LightCondition = .fullSun
     @State private var wateringDays: WateringFrequency = .everyDay
     @State private var waterAmount: WaterAmount = .small
-    
+    @State private var showNameError = false
+
+    // The name without extra spaces (so "   " counts as empty)
+    private var trimmedName: String {
+        name.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     var body: some View {
         VStack(spacing: 25) {
-            
+
             HStack {
                 Button { dismiss() } label: {
                     Image(systemName: "xmark")
@@ -27,16 +33,22 @@ struct ReminderPage: View {
                 Text("Set Reminder").font(.headline)
                 Spacer()
                 Button {
+                    // Stop here if the name is empty: keep the form open and show a message
+                    guard !trimmedName.isEmpty else {
+                        showNameError = true
+                        return
+                    }
+
                     if let plant = plant {
                         var newPlant = plant
-                        newPlant.name = name
+                        newPlant.name = trimmedName
                         newPlant.room = room
                         newPlant.light = light
                         newPlant.wateringDays = wateringDays
                         newPlant.waterAmount = waterAmount
                         viewModel.updatePlant(newPlant)
                     } else {
-                        viewModel.addPlant(name: name, room: room, light: light,
+                        viewModel.addPlant(name: trimmedName, room: room, light: light,
                                            wateringDays: wateringDays, waterAmount: waterAmount)
                     }
                     dismiss()
@@ -48,15 +60,31 @@ struct ReminderPage: View {
                         .clipShape(Circle())
                 }
             }
-            
-            HStack {
-                Text("Plant Name")
-                TextField("Pothos", text: $name).tint(.green)
+
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text("Plant Name")
+                    TextField("Pothos", text: $name).tint(.green)
+                }
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .clipShape(Capsule())
+                .overlay(
+                    Capsule().stroke(Color.red, lineWidth: showNameError ? 1.5 : 0)
+                )
+
+                if showNameError {
+                    Text("Please enter a plant name")
+                        .font(.caption)
+                        .foregroundColor(.red)
+                        .padding(.leading, 16)
+                }
             }
-            .padding()
-            .background(Color.gray.opacity(0.2))
-            .clipShape(Capsule())
-            
+            // Hide the message as soon as the user starts typing
+            .onChange(of: name) {
+                showNameError = false
+            }
+
             VStack {
                 HStack {
                     Label("Room", systemImage: "location")
@@ -81,7 +109,7 @@ struct ReminderPage: View {
             .padding()
             .background(Color.gray.opacity(0.2))
             .cornerRadius(25)
-            
+
             VStack {
                 HStack {
                     Label("Watering Days", systemImage: "drop")
@@ -106,7 +134,7 @@ struct ReminderPage: View {
             .padding()
             .background(Color.gray.opacity(0.2))
             .cornerRadius(25)
-            
+
             // Delete button shows only when editing
             if let plant = plant {
                 Button {
@@ -121,7 +149,7 @@ struct ReminderPage: View {
                         .clipShape(Capsule())
                 }
             }
-            
+
             Spacer()
         }
         .tint(.gray)
